@@ -1,4 +1,5 @@
 import { type NextPage } from "next";
+import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { trpc } from "../utils/trpc";
@@ -67,6 +68,7 @@ const CompanyViewer: React.FC<{ company: Company }> = ({
     <div className="flex w-full">
       <div id="left" className="w-1/2 pr-8">
         <h1>{company.name}</h1>
+        <Link href={company.recordURL} className="text-sm opacity-50 hover:opacity-100">open in airtable</Link>
         <div className="py-4">
           <DetailedSection
             sectionName="Amount Raising"

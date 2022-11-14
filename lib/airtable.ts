@@ -8,12 +8,9 @@ export type Company = {
   problem: string;
   description: string;
   id: string;
+  recordURL: string;
 };
 
-enum OpinionOptions {
-  "Explore",
-  "Reject",
-}
 
 const fetchAirtable = async () => {
   const myHeaders = new Headers();
@@ -54,6 +51,7 @@ export const fetchDF = async () => {
       problem: company.fields["Problem in Focus"],
       description: company.fields["Description"],
       id: company.id,
+      recordURL: `https://airtable.com/apptcOM65nkIWJy1l/tblltzjPiwy7gOkKE/viwg63PSZQ8mWWeID/${company.id}?blocks=hide`,
     };
   });
   return structuredData as Company[];
