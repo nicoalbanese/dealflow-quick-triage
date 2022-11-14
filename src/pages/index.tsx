@@ -3,7 +3,6 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { trpc } from "../utils/trpc";
 import { userValid } from "../../lib/userLogic";
-import { voteOnBusiness } from "../../lib/airtable";
 import type { Company } from "../../lib/airtable";
 
 const Home: NextPage = () => {
@@ -25,7 +24,7 @@ const MainApplication: React.FC = () => {
 
   const { data: sessionData } = useSession();
   if (sessionData?.user) {
-    if (userValid(sessionData?.user?.email as string)) {
+    if (company.data?.message == "success") {
       return (
         <>
           <div className="mb-8 flex items-center justify-between">
