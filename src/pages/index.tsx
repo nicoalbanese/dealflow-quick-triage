@@ -2,7 +2,6 @@ import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { trpc } from "../utils/trpc";
-import { userValid } from "../../lib/userLogic";
 import type { Company } from "../../lib/airtable";
 
 const Home: NextPage = () => {
