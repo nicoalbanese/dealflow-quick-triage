@@ -11,7 +11,6 @@ export type Company = {
   recordURL: string;
 };
 
-
 const fetchAirtable = async () => {
   const myHeaders = new Headers();
   myHeaders.append(
@@ -59,7 +58,8 @@ export const fetchDF = async () => {
 
 const patchAirtable = async (
   companyId: string,
-  verdict: "Explore" | "Reject"
+  verdict: "Explore" | "Reject",
+  userEmail: string
 ) => {
   const myHeaders = new Headers();
   myHeaders.append(
@@ -69,29 +69,50 @@ const patchAirtable = async (
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Cookie", "brw=brwy1TrDiZyNAsU5u");
 
+  let colName = "Nico's opinion";
+
+  switch (userEmail) {
+    case "gcalbanese96@gmail.com":
+      colName = "Nico's opinion";
+      break;
+    case "nico@ascension.vc":
+      colName = "Nico's opinion";
+      break;
+    case "remy@ascension.vc":
+      colName = "Remy's opinion";
+      break;
+    case "sonia@ascension.vc":
+      colName = "Sonia's opinion";
+      break;
+    default:
+      console.log("default")
+      break;
+  }
+
+
   const requestOptions = {
     method: "PATCH",
     headers: myHeaders,
     redirect: "follow",
     body: JSON.stringify({
-      records: [{ id: companyId, fields: { "Nico's opinion": verdict } }],
+      records: [{ id: companyId, fields: { [colName]: verdict } }],
     }),
   };
   const AIRTABLE_URL = "https://api.airtable.com/v0/apptcOM65nkIWJy1l/Pipeline";
 
-  // AIRTABLE_URL = urlWithoutSort;
+
   const res = await fetch(AIRTABLE_URL, requestOptions as RequestInit);
-  // console.log(res);
+
   const data = await res.json();
   return data;
 };
 
 export const voteOnBusiness = async (
-  voterName: string,
+  userEmail: string,
   companyId: string,
   verdict: string
 ) => {
-  console.log(voterName, companyId, verdict);
+  console.log(userEmail, companyId, verdict);
 
   let finalVerdict: "Explore" | "Reject";
   if (verdict == "like") {
@@ -100,5 +121,5 @@ export const voteOnBusiness = async (
     finalVerdict = "Reject";
   }
   // POST Request to airtabl
-  return await patchAirtable(companyId, finalVerdict);
+  return await patchAirtable(companyId, finalVerdict, userEmail);
 };
