@@ -24,7 +24,9 @@ const MainApplication: React.FC = () => {
 
   const { data: sessionData } = useSession();
   if (sessionData?.user) {
-    if (company.data?.message == "success") {
+    if (company.status === "loading") {
+      return <>loading...</>;
+    } else if (company.data?.message == "success") {
       return (
         <>
           <div className="mb-8 flex items-center justify-between">
@@ -40,7 +42,10 @@ const MainApplication: React.FC = () => {
     } else
       return (
         <>
-          <h1>You are not a valid user soz</h1>
+          <h1>
+            Your account has not been approved. Please contact the
+            administrator.
+          </h1>
           <button onClick={() => signOut()}>Log out</button>
         </>
       );
@@ -68,7 +73,12 @@ const CompanyViewer: React.FC<{ company: Company }> = ({
     <div className="flex w-full">
       <div id="left" className="w-1/2 pr-8">
         <h1>{company.name}</h1>
-        <Link href={company.recordURL} className="text-sm opacity-50 hover:opacity-100">open in airtable</Link>
+        <Link
+          href={company.recordURL}
+          className="text-sm opacity-50 hover:opacity-100"
+        >
+          open in airtable
+        </Link>
         <div className="py-4">
           <DetailedSection
             sectionName="Amount Raising"
