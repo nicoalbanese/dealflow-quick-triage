@@ -11,7 +11,30 @@ export type Company = {
   recordURL: string;
 };
 
-const fetchAirtable = async () => {
+const fetchAirtable = async (userEmail: string) => {
+  console.log(userEmail);
+
+  let colName = "Nico's opinion";
+
+  switch (userEmail) {
+    case "gcalbanese96@gmail.com":
+      colName = "Sonia's opinion";
+      break;
+    case "nico@ascension.vc":
+      colName = "Nico's opinion";
+      break;
+    case "remy@ascension.vc":
+      colName = "Remy's opinion";
+      break;
+    case "sonia@ascension.vc":
+      colName = "Sonia's opinion";
+      break;
+    default:
+      console.log("default");
+      break;
+  }
+  console.log(colName)
+
   const myHeaders = new Headers();
   myHeaders.append(
     "Authorization",
@@ -26,7 +49,8 @@ const fetchAirtable = async () => {
   };
   const AIRTABLE_URL = `https://api.airtable.com/v0/apptcOM65nkIWJy1l/Pipeline?view=${encodeURI(
     "(Quick Triage API)"
-  )}&maxRecords=1`;
+  )}&maxRecords=1&filterByFormula=${encodeURI(`{${colName}} = BLANK()`)}`;
+  console.log(AIRTABLE_URL)
 
   // AIRTABLE_URL = urlWithoutSort;
   const res = await fetch(AIRTABLE_URL, requestOptions as RequestInit);
@@ -35,8 +59,8 @@ const fetchAirtable = async () => {
   return data;
 };
 
-export const fetchDF = async () => {
-  const data = await fetchAirtable();
+export const fetchDF = async (userEmail: string) => {
+  const data = await fetchAirtable(userEmail);
   //   return data;
 
   const structuredData = data.records.map((company: any): Company => {
@@ -85,10 +109,9 @@ const patchAirtable = async (
       colName = "Sonia's opinion";
       break;
     default:
-      console.log("default")
+      console.log("default");
       break;
   }
-
 
   const requestOptions = {
     method: "PATCH",
@@ -99,7 +122,6 @@ const patchAirtable = async (
     }),
   };
   const AIRTABLE_URL = "https://api.airtable.com/v0/apptcOM65nkIWJy1l/Pipeline";
-
 
   const res = await fetch(AIRTABLE_URL, requestOptions as RequestInit);
 

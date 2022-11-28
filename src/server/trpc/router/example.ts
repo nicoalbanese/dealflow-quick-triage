@@ -10,7 +10,7 @@ export const exampleRouter = router({
     });
 
     if (currentUser?.authorised) {
-      const companies = await fetchDF();
+      const companies = await fetchDF(currentUser.email as string);
       return { message: "success", companies };
     } else {
       return { message: "unauthorised", companies: [] };
