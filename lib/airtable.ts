@@ -26,7 +26,7 @@ const fetchAirtable = async (userEmail: string) => {
     case "remy@ascension.vc":
       colName = "Remy's opinion";
       break;
-    case "sonia@ascension.vc":
+    case "soniag@ascension.vc":
       colName = "Sonia's opinion";
       break;
     default:
