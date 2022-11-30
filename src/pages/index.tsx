@@ -123,7 +123,14 @@ const CompanyViewer: React.FC<{ company: Company }> = ({
         </div>
       </div>
       <div id="right" className="w-full">
-        <iframe src={company.deck} width="100%" height="800px"></iframe>
+        {company.deck.includes("https://dl.airtable.com/.attachments") ? (
+          <iframe src={company.deck} width="100%" height="800px"></iframe>
+        ) : (
+          <div>
+            This deck is hosted externally. Please <Link className="underline hover:opacity-75" target="_blank" href={company.deck}>click here</Link> to view this
+            deck.
+          </div>
+        )}
       </div>
     </div>
   );
