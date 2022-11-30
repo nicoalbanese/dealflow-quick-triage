@@ -27,18 +27,23 @@ const MainApplication: React.FC = () => {
     if (company.status === "loading") {
       return <>loading...</>;
     } else if (company.data?.message == "success") {
-      return (
-        <>
-          <div className="mb-8 flex items-center justify-between">
-            <div>{""}</div>
-            <h1>Welcome {sessionData.user.email}</h1>
-            <button onClick={() => signOut()}>sign out</button>
-          </div>
-          {company.data?.companies && (
-            <CompanyViewer company={company.data.companies[0] as Company} />
-          )}
-        </>
-      );
+      if (company.data.companies.length > 0) {
+        return (
+          <>
+            <Header />
+            {company.data?.companies && (
+              <CompanyViewer company={company.data.companies[0] as Company} />
+            )}
+          </>
+        );
+      } else {
+        return (
+          <>
+            <Header />
+            <div>No more companies!</div>
+          </>
+        );
+      }
     } else
       return (
         <>
@@ -64,7 +69,7 @@ const CompanyViewer: React.FC<{ company: Company }> = ({
 }: {
   company: Company;
 }) => {
-  const { data: sessionData } = useSession();
+  // const { data: sessionData } = useSession();
   const utils = trpc.useContext();
   const sendOpinion = trpc.example.sendOpinion.useMutation({
     onSuccess: () => utils.example.getAll.refetch(),
@@ -127,8 +132,15 @@ const CompanyViewer: React.FC<{ company: Company }> = ({
           <iframe src={company.deck} width="100%" height="800px"></iframe>
         ) : (
           <div>
-            This deck is hosted externally. Please <Link className="underline hover:opacity-75" target="_blank" href={company.deck}>click here</Link> to view this
-            deck.
+            This deck is hosted externally. Please{" "}
+            <Link
+              className="underline hover:opacity-75"
+              target="_blank"
+              href={company.deck}
+            >
+              click here
+            </Link>{" "}
+            to view this deck.
           </div>
         )}
       </div>
@@ -149,6 +161,18 @@ const DetailedSection = ({
         {sectionName}
       </h5>
       <p>{body}</p>
+    </div>
+  );
+};
+
+const Header = () => {
+  const { data: sessionData } = useSession();
+
+  return (
+    <div className="mb-8 flex items-center justify-between">
+      <div>{""}</div>
+      <h1>Welcome {sessionData?.user?.email}</h1>
+      <button onClick={() => signOut()}>sign out</button>
     </div>
   );
 };
